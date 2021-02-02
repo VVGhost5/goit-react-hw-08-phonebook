@@ -1,0 +1,18 @@
+.container {
+    width: 32%;
+    justify-content: space-between;
+    display: flex;
+}
+
+.button {
+    color: white;
+    display: block;
+    border: 1px solid white;
+    background-color: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.span {
+    line-height: 2;
+}

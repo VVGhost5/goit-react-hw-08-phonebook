@@ -17,7 +17,7 @@ const initialState = { contacts: [], filter: "" };
 
 const contacts = createReducer(initialState.contacts, {
   [addContactSuccess]: (state, { payload }) => {
-    const checkedContacts = state.some((el) => el.contactName === payload.name);
+    const checkedContacts = state.some((el) => el.name === payload.name);
     if (checkedContacts) {
       return alert("This contact is already in your contacts");
     }
@@ -26,7 +26,7 @@ const contacts = createReducer(initialState.contacts, {
   [deleteContactSuccess]: (state, { payload }) => {
     return state.filter((el) => el.id !== payload);
   },
-  [fetchContactSuccess]: (state, { payload }) => payload,
+  [fetchContactSuccess]: (_, { payload }) => payload,
 });
 
 const filter = createReducer(initialState.filter, {

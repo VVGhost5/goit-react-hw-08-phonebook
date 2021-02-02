@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import {
   addContactSuccess,
   addContactError,
@@ -12,39 +11,47 @@ import {
 } from "./app-actions";
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:4040";
-
-const fetchContacts = () => (dispatch) => {
+const fetchContacts = () => async (dispatch) => {
   dispatch(fetchContactRequest());
 
-  axios
-    .get("/contacts")
-    .then(({ data }) => dispatch(fetchContactSuccess(data)))
-    .catch((error) => dispatch(fetchContactError(error)));
+  try {
+    const { data } = await axios.get("/contacts");
+    dispatch(fetchContactSuccess(data));
+  } catch (error) {
+    dispatch(fetchContactError(error.message));
+  }
 };
 
-const addContact = ({ name, number }) => (dispatch) => {
-  const contact = {
-    id: uuidv4(),
-    contactName: name,
+const addContact = ({ name, number }) => async (dispatch) => {
+  const Contact = {
+    name,
     number,
   };
-
   dispatch(addContactRequest());
 
-  axios
-    .post("/contacts", contact)
-    .then(({ data }) => dispatch(addContactSuccess(data)))
-    .catch((error) => dispatch(addContactError(error)));
+  try {
+    const response = await axios.post("/contacts", Contact);
+    dispatch(addContactSuccess(response.data));
+  } catch (error) {
+    dispatch(addContactError(error));
+  }
 };
 
-const deleteContact = (id) => (dispatch) => {
+const deleteContact = (id) => async (dispatch) => {
   dispatch(deleteContactRequest());
 
-  axios
-    .delete(`/contacts/${id}`)
-    .then(() => dispatch(deleteContactSuccess(id)))
-    .catch((error) => dispatch(deleteContactError(error)));
+  try {
+    await axios.delete(`/contacts/${id}`);
+    dispatch(deleteContactSuccess(id));
+  } catch (error) {
+    dispatch(deleteContactError(error.message));
+  }
 };
 
-export default { addContact, deleteContact, fetchContacts };
+const appOperations = {
+  fetchContacts,
+  addContact,
+  deleteContact,
+};
+
+export default appOperations;

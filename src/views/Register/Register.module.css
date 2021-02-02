@@ -1,0 +1,43 @@
+.form {
+    display: block;
+}
+
+.registration {
+    margin: 0 auto;
+    display: block;
+    width: 32%;
+}
+
+.title {
+    text-align: center;
+}
+
+.inputBlock {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.label {
+    margin-right: 20px;
+}
+
+.input {
+border: 1px solid black;
+border-radius: 5px;
+}
+
+.button {
+display: block;
+width: 120px;
+height: 30px;
+margin: 0 auto;
+border: 1px solid black;
+border-radius: 5px;
+background-color: transparent;
+cursor: pointer;
+}
+
+.button:hover {
+    background-color: lightblue;
+}

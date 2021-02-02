@@ -18,3 +18,8 @@
   background-color: transparent;
   cursor: pointer;
 }
+
+.contacts {
+  width: 40%;
+  margin: 0 auto;
+}

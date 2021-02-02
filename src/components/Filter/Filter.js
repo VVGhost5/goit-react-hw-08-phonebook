@@ -2,10 +2,14 @@ import React from "react";
 import styles from "./Filter.module.css";
 import PropTypes from "prop-types";
 import { filterContacts } from "../../redux/app/app-actions";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import appSelectors from "../../redux/app//app-selectors";
 
-const Filter = ({ value, onChange }) => {
+const Filter = () => {
+  const dispatch = useDispatch();
+  const value = useSelector(appSelectors.getFilter);
+  const onChange = (e) => dispatch(filterContacts(e.target.value));
+
   return (
     <label>
       Find contacts by name
@@ -21,17 +25,4 @@ const Filter = ({ value, onChange }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  value: appSelectors.getFilter(state),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onChange: (e) => dispatch(filterContacts(e.target.value)),
-});
-
-Filter.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  name: PropTypes.string,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Filter);
+export default Filter;

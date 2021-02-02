@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import styles from "./Form.module.css";
 import PropTypes from "prop-types";
 import appOperations from "../../redux/app/app-operations";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 
-const Form = function ({ onSubmit }) {
+const Form = function () {
+  const dispatch = useDispatch();
+  const onSubmit = (name, number) =>
+    dispatch(appOperations.addContact({ name, number }));
+
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
 
@@ -53,23 +57,4 @@ const Form = function ({ onSubmit }) {
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit: (name, number) =>
-    dispatch(appOperations.addContact({ name, number })),
-});
-
-Form.propTypes = {
-  name: PropTypes.string,
-  number: PropTypes.string,
-  contacts: PropTypes.arrayOf(
-    PropTypes.exact({
-      id: PropTypes.string.isRequired,
-      contactName: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ),
-  onChange: PropTypes.func,
-  onSubmit: PropTypes.func.isRequired,
-};
-
-export default connect(null, mapDispatchToProps)(Form);
+export default Form;

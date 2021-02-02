@@ -1,34 +1,35 @@
-import React, { useEffect } from "react";
-import Form from "./components/Form/Form";
-import Contacts from "./components/Contacts/Contacts";
-import Filter from "./components/Filter/Filter";
-import Notification from "./components/Notification/Notification";
-import { connect } from "react-redux";
-import appOperations from "./redux/app/app-operations";
-import appSelectors from "./redux/app/app-selectors";
+import React, { lazy, Suspense, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Switch, Route } from "react-router-dom";
+import authOperations from "./redux/auth/auth-operations";
+import Loading from "./components/Loading/Loading";
+import AppBar from "./components/AppBar/AppBar";
 
-const App = function ({ contacts, isLoading, fetchContacts }) {
+const Home = lazy(() => import("./views/Home/Home"));
+const Register = lazy(() => import("./views/Register/Register"));
+const Login = lazy(() => import("./views/Login/Login"));
+const Contacts = lazy(() => import("./views/Contacts/Contacts"));
+
+const App = function () {
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    fetchContacts();
-  }, []);
+    dispatch(authOperations.fetchCurrentUser());
+  }, [dispatch]);
 
   return (
     <div className="container">
-      <Form />
-      {contacts.length ? <Contacts /> : <Notification />}
-      <Filter />
-      {isLoading && <h2>Loading...</h2>}
+      <AppBar />
+      <Suspense fallback={<Loading />}>
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/register" component={Register} />
+          <Route path="/login" component={Login} />
+          <Route path="/contacts" component={Contacts} />
+        </Switch>
+      </Suspense>
     </div>
   );
 };
 
-const mapStateToProps = (state) => ({
-  contacts: appSelectors.getContacts(state),
-  isLoading: appSelectors.getIsLoading(state),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  fetchContacts: () => dispatch(appOperations.fetchContacts()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
